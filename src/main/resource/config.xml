@@ -40,10 +40,11 @@
         <!-- enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
             enableSelectByExample="false" selectByExampleQueryId="false" -->
         <!--已生成的表 <table schema="demo" tableName="USER" domainObjectName="User"></table> -->
-        <table schema="" tableName="test" domainObjectName="Test"
-            enableCountByExample="false" enableUpdateByExample="false"
+            <!-- enableCountByExample="false" enableUpdateByExample="false"
             enableDeleteByExample="false" enableSelectByExample="false"
-            selectByExampleQueryId="false">
+            selectByExampleQueryId="false" -->
+        <table schema="" tableName="test" domainObjectName="Test"
+            >
         </table>
 
     </context>

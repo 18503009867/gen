@@ -18,6 +18,7 @@ package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 import java.util.Iterator;
 
 import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -45,6 +46,11 @@ public class SimpleSelectAllElementGenerator extends
                 "id", introspectedTable.getSelectAllStatementId())); //$NON-NLS-1$
         answer.addAttribute(new Attribute("resultMap", //$NON-NLS-1$
                 introspectedTable.getBaseResultMapId()));
+        
+        FullyQualifiedJavaType parameterType = new FullyQualifiedJavaType(
+                    introspectedTable.getBaseRecordType());
+
+        answer.addAttribute(new Attribute("parameterType", parameterType.getFullyQualifiedName()));
 
         context.getCommentGenerator().addComment(answer);
 
@@ -75,6 +81,33 @@ public class SimpleSelectAllElementGenerator extends
         sb.append(introspectedTable
                 .getAliasedFullyQualifiedTableNameAtRuntime());
         answer.addElement(new TextElement(sb.toString()));
+
+        iter = introspectedTable.getAllColumns().iterator();
+        
+        //<trim prefixOverrides="and" prefix="where"></trim>
+        
+        //XmlElement trimElement = new XmlElement("trim");
+        //trimElement.addAttribute(new Attribute("prefixOverrides","and"));
+        //trimElement.addAttribute(new Attribute("prefix","where"));
+        answer.addElement(new TextElement("where 1=1"));
+        while (iter.hasNext()) {
+        	sb.setLength(0);
+            sb.append("and "); //$NON-NLS-1$
+        	IntrospectedColumn next = iter.next();
+        	XmlElement ifElement = new XmlElement("if");
+        	ifElement.addAttribute(new Attribute("test", next.getJavaProperty()+"!= null"));
+        	
+            sb.append(MyBatis3FormattingUtilities.getSelectListPhrase(next))
+            .append("=").append(MyBatis3FormattingUtilities.getParameterClause(next));
+
+            TextElement element = new TextElement(sb.toString());
+            
+            ifElement.addElement(element);
+            
+            answer.addElement(ifElement); 
+          
+        }
+        
         
         String orderByClause = introspectedTable.getTableConfigurationProperty(PropertyRegistry.TABLE_SELECT_ALL_ORDER_BY_CLAUSE);
         boolean hasOrderBy = StringUtility.stringHasValue(orderByClause);
