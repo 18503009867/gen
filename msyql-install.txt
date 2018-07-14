@@ -1,0 +1,34 @@
+1:rpm -qa|grep -i mysql
+2:yum -y remove mysql-community*
+3:wget http://repo.mysql.com/mysql57-community-release-el7-8.noarch.rpm
+4:rpm -ivh mysql57-community-release-el7-8.noarch.rpm 
+5:yum -y install mysql-server 
+6:service mysqld start
+6:grep "password" /var/log/mysqld.log
+
+-- 授权：
+update mysql.user set authentication_string=password('root2018') where User='root' and Host='localhost'; 
+flush privileges;
+二、删除用户
+Delete FROM mysql.user Where User="用户名" and Host=”localhost”; 
+flush privileges;
+三:创建用户
+命令:CREATE USER 'genst'@'%' IDENTIFIED BY 'genst';
+删除账户及权限：
+drop user 'genst'@'%';
+drop user 'genst'@'localhost';
+三、为用户授权
+授权格式：grant 权限 on 数据库.* to 用户名@登录主机 identified by “密码”;
+eg: grant all privileges on *.* to 'genst'@'%' identified by 'genst' with grant option;
+flush privileges; //要刷新权限
+授权test用户拥有testDB数据库的所有权限：
+grant all privileges on testDB.* to “test”@”localhost” identified by “1234”; 
+flush privileges; #刷新系统权限表
+指定部分权限给用户:
+grant select,update on testDB.* to “test”@”localhost” identified by “1234”; 
+flush privileges; #刷新系统权限表
+四、显示当前用户信息
+select user(); 
+
+eg: grant all privileges on genst.* to 'genst'@'%' identified by 'genst' with grant option;
+flush privileges; //要刷新权限
