@@ -43,9 +43,10 @@
             <!-- enableCountByExample="false" enableUpdateByExample="false"
             enableDeleteByExample="false" enableSelectByExample="false"
             selectByExampleQueryId="false" -->
-        <table schema="" tableName="test" domainObjectName="Test"
-            >
+        <table schema="" tableName="test" domainObjectName="Test">
+        	<property name="rootInterface" value="com.tnative.base.dao.BaseMapper"/>
         </table>
+        <table schema="" tableName="user" domainObjectName="User"/>
 
     </context>
 </generatorConfiguration>
